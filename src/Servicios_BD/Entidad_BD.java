@@ -1,0 +1,86 @@
+package Servicios_BD;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import Desarrollo.Entidad;
+import Desarrollo.Extras;
+
+public class Entidad_BD {
+	public void insertar_entidad(Entidad e) throws ClassNotFoundException, SQLException {
+		String consulta = "Select insertar_entidad(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		PreparedStatement prepa = ConnectionManage.getIntancia().getconection().prepareStatement(consulta);
+		prepa.setString(1, e.getNombre());
+		prepa.setString(2, e.getEntidad());
+		prepa.setString(3, e.getMunicipio());
+		prepa.setString(4, e.getProvincia());
+		prepa.setString(5, e.getDireccion());
+		prepa.setString(6, e.getCalle());
+		prepa.setString(7, e.getEntrecalle1());
+		prepa.setString(8, e.getEntrecalle2());
+		prepa.setString(9, e.getNumero());
+		prepa.setString(10, e.getLocalidad());
+		prepa.setString(11, e.getHorario_actual_entrada());
+		prepa.setString(12, e.getHorario_actual_salida());
+		prepa.setString(13, e.getHorario_propuesto_entrada());
+		prepa.setString(14, e.getHorario_propuesto_salida());
+		prepa.setString(15, e.getDatos());
+		prepa.execute();
+	}
+	
+	public void eliminar_entidades() throws ClassNotFoundException, SQLException {
+		String consulta = "Select eliminar_entidades()";
+		PreparedStatement prepa = ConnectionManage.getIntancia().getconection().prepareStatement(consulta);
+		prepa.execute();
+	}
+	
+	public ArrayList<String> listado_entidades_nombre() throws SQLException, ClassNotFoundException{
+		ArrayList<String>listado_entidades_nombre = new ArrayList<String>();
+		String consulta = "SELECT Distinct centro_trabajo FROM public.entidad";
+		PreparedStatement prepa = ConnectionManage.getIntancia().getconection().prepareStatement(consulta);
+		ResultSet resultado = prepa.executeQuery();
+		while(resultado.next()) {
+			listado_entidades_nombre.add(resultado.getString(1));
+		}
+		return listado_entidades_nombre;
+	}
+	
+	public ArrayList<String> listado_municipios_entidades(ArrayList<String>listado) throws ClassNotFoundException, SQLException{
+		ArrayList<String>listado_municipios_entidades = new ArrayList<String>();
+		for(int contador = 0; contador< listado.size();contador++) {
+			String consulta = "SELECT municipio FROM public.entidad Where entidad.centro_trabajo Like ?";			
+			PreparedStatement prepa = ConnectionManage.getIntancia().getconection().prepareStatement(consulta);
+			prepa.setString(1, Extras.getInstance().getListado_filtroArrayList().get(contador));
+			ResultSet resultado = prepa.executeQuery();
+			while(resultado.next()) {
+				boolean verdad = false;
+				String valor = resultado.getString(1);
+				for(int contador2 = 0; contador2<listado_municipios_entidades.size() && verdad == false;contador2++) {
+					if(valor.equals(listado_municipios_entidades.get(contador2)) == true) {
+						verdad = true;
+					}
+				}
+				if(verdad == false) {
+					listado_municipios_entidades.add(valor);
+				}
+			}
+		}
+		return listado_municipios_entidades;
+	}
+	
+	public long calculo(String origen,String destino, String entidad) throws ClassNotFoundException, SQLException {
+		long valor = 0;
+		String consulta = "SELECT Count(persona.nombre) FROM public.persona inner Join entidad on persona.idsede Like entidad.centro_trabajo and entidad.centro_trabajo Like ?  Where persona.municipio Like ? and entidad.municipio Like ?";
+		PreparedStatement prepa = ConnectionManage.getIntancia().getconection().prepareStatement(consulta);
+		prepa.setString(1, entidad);
+		prepa.setString(2, origen);
+		prepa.setString(3, destino);
+		ResultSet resultado = prepa.executeQuery();
+		while(resultado.next()) {
+			valor = valor+resultado.getLong(1);
+		}
+		return valor;
+	}
+}
