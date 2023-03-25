@@ -35,6 +35,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -450,9 +451,7 @@ public class Cargar_archivo extends JDialog {
 				Transporte.getInstance().eliminar_entidad(Transporte.getInstance().getListado_entidades().get(contador));
 			} catch (org.postgresql.util.PSQLException e2) {
 				String causa = "Los datos ya se han introducido previamente";
-				try {
-					ConnectionManage.getIntancia().getconection();
-				} catch (Exception e3) {
+				try (Connection con = ConnectionManage.getIntancia().getconection()){} catch (Exception e3) {
 					causa = "Servidor no encontrado";
 				}
 				Errores erro = new Errores(Transporte.getInstance().getListado_entidades().get(contador), causa); 

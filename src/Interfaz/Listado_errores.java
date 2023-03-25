@@ -14,9 +14,11 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import Abstractas.Generales;
+import Controller.Listado_Errores_Controller;
 import Desarrollo.Entidad;
 import Desarrollo.Errores;
 import Desarrollo.Transporte;
+import Interfaces.Table_Interfaces;
 
 import javax.swing.JScrollBar;
 import java.awt.event.ActionListener;
@@ -25,10 +27,11 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 
-public class Listado_errores extends JDialog {
+public class Listado_errores extends JDialog{
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
+	private Listado_Errores_Controller listado_Errores_Controller = new Listado_Errores_Controller();
 
 	/**
 	 * Launch the application.
@@ -46,7 +49,7 @@ public class Listado_errores extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Listado_errores() {
+	public Listado_errores(){
 		setModal(true);
 		setTitle("Error");
 		setBounds(100, 100, 917, 658);
@@ -88,33 +91,6 @@ public class Listado_errores extends JDialog {
 	}
 	
 	private void actualizarTabla() {
-		ArrayList<Errores>listado = Transporte.getInstance().getListado_errores();
-		String[] encabezado = {"Nombre","Hoja","Fila","Denominación","Causa"};		
-		Object [] [] tabla = new Object[listado.size()][encabezado.length];		
-
-		for(int i=0; i<listado.size(); i++){
-			int p = -1;
-			tabla [i] [++p] = listado.get(i).getEntidad().getNombre();
-			tabla [i] [++p] = listado.get(i).getEntidad().getHoja()+1;
-			tabla [i] [++p] = listado.get(i).getEntidad().getFila()+1;
-			if(listado.get(i).getEntidad() instanceof Entidad) {
-				tabla [i][++p] = "Centro de Trabajo";
-			}
-			else {
-				tabla [i][++p] = "Personal";
-			}
-			tabla [i] [++p] = listado.get(i).getCausa();
-			Transporte.getInstance().getListado_errores().remove(i);
-		}		
-		
-		DefaultTableModel defaultTableModel = new DefaultTableModel(tabla, encabezado){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isCellEditable(int row, int col){
-				return false;
-			}
-		};
-		table.setModel(defaultTableModel);
+		table.setModel(listado_Errores_Controller.actualizar_tabla());
 	}
 }

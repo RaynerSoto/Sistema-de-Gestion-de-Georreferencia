@@ -48,11 +48,12 @@ public class Interfaz_principal extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
+				try (Connection con = ConnectionManage.getIntancia().getconection()){
 					Interfaz_principal frame = new Interfaz_principal();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,e.getMessage(),"Error Crítico",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -96,6 +97,9 @@ public class Interfaz_principal extends JFrame {
 					JOptionPane.showMessageDialog(Interfaz_principal.this, e,"Error",JOptionPane.ERROR_MESSAGE);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(Interfaz_principal.this,"Error en conexion a la Base de datos","Error",JOptionPane.ERROR_MESSAGE);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
