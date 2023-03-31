@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.apache.commons.compress.harmony.pack200.NewAttributeBands.Call;
 
 import Desarrollo.Extras;
-import Servicios_BD.ConnectionManage;
+import Servicios.ConnectionManage;
 
 public class Prueba {
 

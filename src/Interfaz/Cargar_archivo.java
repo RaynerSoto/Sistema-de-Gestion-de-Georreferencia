@@ -23,9 +23,10 @@ import Desarrollo.Entidad;
 import Desarrollo.Errores;
 import Desarrollo.Persona;
 import Desarrollo.Transporte;
-import Servicios_BD.ConnectionManage;
-import Servicios_BD.Entidad_BD;
-import Servicios_BD.Persona_BD;
+import Servicios.ConnectionManage;
+import Servicios.EntidadServices;
+import Servicios.FileServices;
+import Servicios.PersonaServices;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -139,8 +140,8 @@ public class Cargar_archivo extends JDialog {
 					}
 					else {
 						if(seleccion.isSelected() == true) {
-							Entidad_BD enti = new Entidad_BD();
-							Persona_BD perso = new Persona_BD();
+							EntidadServices enti = new EntidadServices();
+							PersonaServices perso = new PersonaServices();
 							try {
 								perso.eliminar_persona();
 								enti.eliminar_entidades();
@@ -438,7 +439,7 @@ public class Cargar_archivo extends JDialog {
 	public void llenar_entidad() throws ClassNotFoundException, SQLException{
 		boolean verdad = false;
 		for(int contador = 0;verdad == false;) {
-			Entidad_BD enti = new Entidad_BD();
+			EntidadServices enti = new EntidadServices();
 			try {
 				if(Transporte.getInstance().getListado_entidades().get(contador).getNombre().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getProvincia().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getMunicipio().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getDireccion().equals("") == true) {
 					String causa = "Valores necesarios no ingresados";
@@ -463,10 +464,11 @@ public class Cargar_archivo extends JDialog {
 		}
 	}
 	
-	public void llenar_personas() throws ClassNotFoundException, SQLException {
+	//Comentar este método para probar el método nuevo para extraer y almacenar la información
+	public void llenar_personas() throws Exception {
 		boolean verdad = false;
 		for(int contador = 0;verdad == false;) {
-			Persona_BD perso = new Persona_BD();
+			PersonaServices perso = new PersonaServices();
 			try {
 				if(Transporte.getInstance().getListado_personas().get(contador).getEntidad().equals("") == true || Transporte.getInstance().getListado_personas().get(contador).getNombre().equals("") == true || Transporte.getInstance().getListado_personas().get(contador).getCI().equals("") == true || Transporte.getInstance().getListado_personas().get(contador).getDireccion().equals("") == true || Transporte.getInstance().getListado_personas().get(contador).getCI().length() != 11) {
 					String causa = "Valores necesarios no ingresados o erroneos";
@@ -502,12 +504,10 @@ public class Cargar_archivo extends JDialog {
 	}
 	
 	public void insertar_Excel_BD() {
-
+	FileServices fileServices = new FileServices();
 		try {
-			File fichero = new File(direccion.getText());
-			Workbook libro = WorkbookFactory.create(fichero);
-			ArrayList<Sheet>hojas = new ArrayList<Sheet>();
-			hojas = listado_hojas(libro);
+			Workbook libro = fileServices.creacion_libro(direccion.getText());
+			ArrayList<Sheet>hojas = fileServices.listado_hojas(libro);
 			if(hojas.size() == 2) {
 				for(int contador = 0; contador < hojas.size();contador++) {
 					int cantidad_filas = hojas.get(contador).getLastRowNum()+1;

@@ -1,4 +1,4 @@
-package Servicios_BD;
+package Servicios;
 
 import java.sql.Connection;
 import java.util.logging.*;

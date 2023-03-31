@@ -1,4 +1,4 @@
-package Servicios_BD;
+package Servicios;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import Desarrollo.Entidad;
 import Desarrollo.Extras;
 
-public class Entidad_BD {
+public class EntidadServices {
 	public void insertar_entidad(Entidad e) throws ClassNotFoundException, SQLException,Exception {
 		try (Connection con = ConnectionManage.getIntancia().getconection()){
 			String consulta = "{call insertar_entidad(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";

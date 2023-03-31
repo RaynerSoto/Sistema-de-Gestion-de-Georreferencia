@@ -1,4 +1,4 @@
-package Servicios_BD;
+package Servicios;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 import Desarrollo.Persona;
 
-public class Persona_BD {
+public class PersonaServices {
 	public void insertar_persona(Persona p) throws ClassNotFoundException, SQLException,Exception{
 		try (Connection con = ConnectionManage.getIntancia().getconection()){
 			String consulta = "SELECT insertar_persona(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -28,9 +28,10 @@ public class Persona_BD {
 			prepa.setString(11, p.getLocalidad());
 			prepa.setString(12, p.getDatos());
 			prepa.execute();
+		} catch (SQLException e) {
+			throw new Exception(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new Exception("No se pudo ingresar la entidad");
 		}
 	}
 	

@@ -14,8 +14,8 @@ import Desarrollo.Errores;
 import Desarrollo.Extras;
 import Desarrollo.Persona;
 import Desarrollo.Transporte;
-import Servicios_BD.Entidad_BD;
-import Servicios_BD.Persona_BD;
+import Servicios.EntidadServices;
+import Servicios.PersonaServices;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -114,8 +114,8 @@ public class Matriz_destino_origen extends JDialog {
 	}
 	
 	private void actualizarTabla() throws ClassNotFoundException, SQLException {
-		Entidad_BD enti = new Entidad_BD();
-		Persona_BD perso = new Persona_BD();
+		EntidadServices enti = new EntidadServices();
+		PersonaServices perso = new PersonaServices();
 		ArrayList<String>listado_municipios_entidades = enti.listado_municipios_entidades(Extras.getInstance().getListado_filtroArrayList());
 		String[] encabezado = new String[listado_municipios_entidades.size()+2];
 		encabezado[0] ="Matriz";
