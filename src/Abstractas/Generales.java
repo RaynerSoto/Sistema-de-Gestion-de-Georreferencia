@@ -112,6 +112,5 @@ public abstract class Generales {
 	}
 	public void setHoja(int hoja) {
 		this.hoja = hoja;
-	} 
-	
+	}
 }
