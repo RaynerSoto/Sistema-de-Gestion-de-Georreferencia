@@ -503,7 +503,7 @@ public class Cargar_archivo extends JDialog {
 		return hojas;
 	}
 	
-	public void insertar_Excel_BD() {
+	public void insertar_Excel_BD() throws Exception {
 	FileServices fileServices = new FileServices();
 		try {
 			Workbook libro = fileServices.creacion_libro(direccion.getText());

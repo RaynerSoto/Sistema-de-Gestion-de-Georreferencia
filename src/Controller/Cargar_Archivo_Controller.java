@@ -23,7 +23,7 @@ public class Cargar_Archivo_Controller {
 	public void proceso_cargar_guardar_Excel() {
 		FileServices fileServices = new FileServices();
 			try {
-				Workbook libro = fileServices.creacion_libro(direccion.getText());
+				Workbook libro = fileServices.construccion_libro(direccion.getText());
 				ArrayList<Sheet>hojas = fileServices.listado_hojas(libro);
 				if(hojas.size() == 2) {
 					for(int contador = 0; contador < hojas.size();contador++) {

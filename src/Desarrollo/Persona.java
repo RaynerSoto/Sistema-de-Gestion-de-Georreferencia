@@ -21,5 +21,4 @@ public class Persona extends Generales {
 	public void setCI(String cI) {
 		CI = cI;
 	}
-	
 }
