@@ -12,12 +12,20 @@ import Servicios.FileServices;
 public class Contruccion_libro_prueba {
 
 	@Test
-	public void test() throws EncryptedDocumentException, IOException {
+	public void prueba_null_creacion_libro() throws EncryptedDocumentException, IOException {
+		try {
+			assertNull(new FileServices().construccion_libro("C:\\Users\\rayne\\Desktop\\entidades y personas.xlsx"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void prueba_not_null_creacion_libro() {
 		try {
 			assertNotNull(new FileServices().construccion_libro("C:\\Users\\rayne\\Desktop\\entidades y personas.xlsx"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }
