@@ -6,12 +6,13 @@ import java.util.Date;
 import Desarrollo.Persona;
 
 public class Validar_Persona extends Validar_General{
+	
 	public void validar_persona(Persona persona) throws Exception {
 		validar_general(persona);
 		validar_carnet(persona.getCI());
 	}
+	
 	public void validar_carnet(String CI) throws Exception {
-		boolean verdad = true;
         if (CI.length() != 11) {
         	throw new Exception("El carnet debe tener 11 digitos");
         } else {
@@ -50,7 +51,6 @@ public class Validar_Persona extends Validar_General{
                         	throw new Exception("El carnet tiene errores en el día");
                         }
                     }
-
                 }
                 if (verdad != false) {
                     String posiccion = new Character(CI.charAt(6)).toString();

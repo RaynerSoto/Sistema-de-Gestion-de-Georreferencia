@@ -1,8 +1,9 @@
 package Controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -17,11 +18,13 @@ import Desarrollo.Transporte;
 import Interfaz.Cargar_archivo;
 import Interfaz.Listado_errores;
 import Servicios.ConnectionManage;
+import Servicios.EntidadServices;
 import Servicios.FileServices;
 import Servicios.PersonaServices;
+import Validator.Validar_General;
 
 public class Cargar_Archivo_Controller {
-	
+	/*
 	//Cargar el Excel
 	public void proceso_cargar_guardar_Excel(Object object) {
 		FileServices fileServices = new FileServices();
@@ -83,10 +86,10 @@ public class Cargar_Archivo_Controller {
 			}
 		}
 	
-	
+	*/
 	
 	//Esta función procesa los datos que ya obtuvimos del Excel y enviarlos a la base de datos,obteniendo los errores ocurridos
-	public List<Errores> cargar_datos_personas() throws Exception {
+	public List<Errores> almacenar_personas() throws Exception {
 		ArrayList<Errores>listado_errores = new ArrayList<>();
 		boolean verdad = false;
 		for(int contador = 0;verdad == false;) {
@@ -103,8 +106,7 @@ public class Cargar_Archivo_Controller {
 				Transporte.getInstance().eliminar_persona(Transporte.getInstance().getListado_personas().get(contador));
 			} catch (org.postgresql.util.PSQLException e2) {
 				String causa = "Los datos ya se han introducido previamente";
-				try {
-					ConnectionManage.getIntancia().getconection();
+				try (Connection con = ConnectionManage.getIntancia().getconection()){
 				} catch (Exception e3) {
 					causa = "Servidor no encontrado";
 				}
@@ -119,7 +121,7 @@ public class Cargar_Archivo_Controller {
 	}
 	
 	//Cargar entidades en una lista
-	public List<Entidad> ingresar_entidades(Sheet hoja,int posicion_hoja,int cantidad_filas,int cantida_columnas) {
+	public List<Entidad> extraer_entidades(Sheet hoja,int posicion_hoja,int cantidad_filas,int cantida_columnas) {
 		ArrayList<Entidad>listado_entidades = new ArrayList<>();
 		String nombre = null;
 		String provincia = null;
@@ -138,7 +140,6 @@ public class Cargar_Archivo_Controller {
 		String horario_propuesto_salida = null;
 		for(int contador_fila = 1; contador_fila<cantidad_filas;contador_fila++) {
 			for(int contador_columna=0;contador_columna<cantida_columnas;contador_columna++) {
-				String columna = hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim();
 				if(hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("id.centro trabajo") || hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("centrotrabajo") || hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("centro")) {
 					try {
 						nombre = hoja.getRow(contador_fila).getCell(contador_columna).getStringCellValue();
@@ -251,8 +252,48 @@ public class Cargar_Archivo_Controller {
 		return listado_entidades;
 	}
 	
+	//Guardar entidades en la BD
+	public ArrayList<Errores> almacenar_entidad(ArrayList<Entidad>listaEntidads) throws Exception{
+		ArrayList<Errores> listado_errores = new ArrayList<>();
+		boolean verdad = false;
+		for(int contador = 0;verdad == false;) {
+			EntidadServices enti = new EntidadServices();
+			try {
+				/*
+				if(Transporte.getInstance().getListado_entidades().get(contador).getNombre().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getProvincia().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getMunicipio().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getDireccion().equals("") == true) {
+					String causa = "Valores necesarios no ingresados";
+					Errores erro = new Errores(Transporte.getInstance().getListado_entidades().get(contador), causa); 
+					Transporte.getInstance().getListado_errores().add(erro);
+				}
+				else {
+					enti.insertar_entidad(Transporte.getInstance().getListado_entidades().get(contador));
+				}*/
+				Validar_General val = new Validar_General();
+				val.validar_general(listaEntidads.get(contador));
+				enti.insertar_entidad(listaEntidads.get(contador));
+				listaEntidads.remove(contador)
+			} catch (org.postgresql.util.PSQLException e2) {
+				String causa = "Los datos ya se han introducido previamente";
+				try (Connection con = ConnectionManage.getIntancia().getconection()){} catch (Exception e3) {
+					causa = "Servidor no encontrado";
+				}
+				Errores erro = new Errores(Transporte.getInstance().getListado_entidades().get(contador), causa); 
+				Transporte.getInstance().eliminar_entidad(Transporte.getInstance().getListado_entidades().get(contador));
+				Transporte.getInstance().getListado_errores().add(erro);
+			} catch (java.lang.IndexOutOfBoundsException | NullPointerException e) {
+				verdad = true;
+			} catch (Exception e) {
+				Transporte.getInstance().getListado_errores().add(new Errores(listaEntidads.get(contador),e.getMessage()));
+				listaEntidads.remove(contador);
+			}
+		}
+		return listado_errores;
+	}
+	
+	
+	
 	//Cargar personas en una lista
-	public List<Persona> ingresar_personas(Sheet hoja,int posicion_hoja,int cantidad_filas,int cantida_columnas) {
+	public List<Persona> extraer_personas(Sheet hoja,int posicion_hoja,int cantidad_filas,int cantida_columnas) {
 		ArrayList<Persona> listado_personas = new ArrayList<>();
 		String entidad = null;
 		String nombre = null;
