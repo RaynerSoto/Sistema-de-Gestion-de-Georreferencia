@@ -2,11 +2,9 @@ package Servicios;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLType;
 import java.util.ArrayList;
+import java.sql.*;
 
 import Desarrollo.Entidad;
 import Desarrollo.Extras;
@@ -41,7 +39,7 @@ public class EntidadServices {
 	public void eliminar_entidades() throws ClassNotFoundException, SQLException, Exception {
 		try (Connection con = ConnectionManage.getIntancia().getconection()){
 			String consulta = "{call eliminar_entidades()}";
-			PreparedStatement prepa = con.prepareCall(consulta);
+			CallableStatement prepa = con.prepareCall(consulta);
 			prepa.execute();
 		} catch (Exception e) {
 			e.printStackTrace();

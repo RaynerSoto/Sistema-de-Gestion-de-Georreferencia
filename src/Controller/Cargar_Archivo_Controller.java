@@ -3,6 +3,7 @@ package Controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -85,7 +86,7 @@ public class Cargar_Archivo_Controller {
 	
 	
 	//Esta función procesa los datos que ya obtuvimos del Excel y enviarlos a la base de datos,obteniendo los errores ocurridos
-	public ArrayList<Errores> cargar_datos_personas() throws Exception {
+	public List<Errores> cargar_datos_personas() throws Exception {
 		ArrayList<Errores>listado_errores = new ArrayList<>();
 		boolean verdad = false;
 		for(int contador = 0;verdad == false;) {
@@ -118,7 +119,7 @@ public class Cargar_Archivo_Controller {
 	}
 	
 	//Cargar entidades en una lista
-	public ArrayList<Entidad> ingresar_entidades(Sheet hoja,int posicion_hoja,int cantidad_filas,int cantida_columnas) {
+	public List<Entidad> ingresar_entidades(Sheet hoja,int posicion_hoja,int cantidad_filas,int cantida_columnas) {
 		ArrayList<Entidad>listado_entidades = new ArrayList<>();
 		String nombre = null;
 		String provincia = null;
@@ -251,7 +252,7 @@ public class Cargar_Archivo_Controller {
 	}
 	
 	//Cargar personas en una lista
-	public ArrayList<Persona> ingresar_personas(Sheet hoja,int posicion_hoja,int cantidad_filas,int cantida_columnas) {
+	public List<Persona> ingresar_personas(Sheet hoja,int posicion_hoja,int cantidad_filas,int cantida_columnas) {
 		ArrayList<Persona> listado_personas = new ArrayList<>();
 		String entidad = null;
 		String nombre = null;
@@ -357,6 +358,4 @@ public class Cargar_Archivo_Controller {
 		}
 		return listado_personas;
 	}
-	
-
 }
