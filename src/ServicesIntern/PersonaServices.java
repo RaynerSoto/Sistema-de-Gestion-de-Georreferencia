@@ -1,11 +1,18 @@
 package ServicesIntern;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.apache.poi.ss.usermodel.Sheet;
 
+import Conexion.Conection;
+import Conexion.ConnectionManage;
+import Desarrollo.Errores;
 import Desarrollo.Persona;
 import Desarrollo.Transporte;
+import ServiciosBD.PersonaServicesBD;
+import Validator.Validar_Persona;
 
 public class PersonaServices {
 	//Cargar persona en una lista
@@ -114,5 +121,37 @@ public class PersonaServices {
 			listado_personas.add(per);
 		}
 		return listado_personas;
+	}
+	
+	//Guardar entidades en la BD		
+	public ArrayList<Errores> llenar_personas(ArrayList<Persona>personas) throws Exception {
+		ArrayList<Errores>errores = new ArrayList<>();
+		boolean verdad = false;
+		for(int contador = 0;verdad == false;) {
+			try {
+				validar_E_insertar_Persona(personas.get(contador));
+				personas.remove(contador);
+			} catch (org.postgresql.util.PSQLException e2) {
+				String causa = "Los datos ya se han introducido previamente";
+				try (Connection con = new Conection().conexion()){} catch (Exception e3) {
+					causa = "Servidor no encontrado";
+				}
+				Errores erro = new Errores(Transporte.getInstance().getListado_entidades().get(contador), causa); 
+				personas.remove(contador);
+				errores.add(erro);
+			} catch (java.lang.IndexOutOfBoundsException | NullPointerException e) {
+				verdad = true;
+			} catch (Exception e) {
+				errores.add(new Errores(personas.get(contador),e.getMessage()));
+				personas.remove(contador);
+			}
+		}
+		return errores;
+	}
+	
+	//Validar e insertar en la BD una persona
+	public void validar_E_insertar_Persona(Persona p) throws ClassNotFoundException, SQLException, Exception{
+		new Validar_Persona().validar_persona(p);
+		new PersonaServicesBD().insertar_persona(p);
 	}
 }

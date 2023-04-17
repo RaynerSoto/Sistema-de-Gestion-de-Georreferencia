@@ -1,10 +1,12 @@
 package ServicesIntern;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.apache.poi.ss.usermodel.Sheet;
 
+import Conexion.Conection;
 import Conexion.ConnectionManage;
 import Desarrollo.Entidad;
 import Desarrollo.Errores;
@@ -154,24 +156,29 @@ public class EntidadServices {
 		boolean verdad = false;
 		for(int contador = 0;verdad == false;) {
 			try {
-				new Validar_General().validar_general(listaEntidads.get(contador));
-				new EntidadServicesBD().insertar_entidad(listaEntidads.get(contador));
+				validar_E_insertar_Entidad(listaEntidads.get(contador));
 				listaEntidads.remove(contador);
 			} catch (org.postgresql.util.PSQLException e2) {
 				String causa = "Los datos ya se han introducido previamente";
-				try (Connection con = ConnectionManage.getIntancia().getconection()){} catch (Exception e3) {
+				try (Connection con = new Conection().conexion()){} catch (Exception e3) {
 					causa = "Servidor no encontrado";
 				}
 				Errores erro = new Errores(Transporte.getInstance().getListado_entidades().get(contador), causa); 
 				listaEntidads.remove(contador);
-				Transporte.getInstance().getListado_errores().add(erro);
+				listado_errores.add(erro);
 			} catch (java.lang.IndexOutOfBoundsException | NullPointerException e) {
 				verdad = true;
 			} catch (Exception e) {
-				Transporte.getInstance().getListado_errores().add(new Errores(listaEntidads.get(contador),e.getMessage()));
+				listado_errores.add(new Errores(listaEntidads.get(contador),e.getMessage()));
 				listaEntidads.remove(contador);
 			}
 		}
 		return listado_errores;
+	}
+	
+	//Validar e insertar en la BD una Entidad
+	public void validar_E_insertar_Entidad(Entidad e) throws ClassNotFoundException, SQLException, Exception {
+		new Validar_General().validar_general(e);
+		new EntidadServicesBD().insertar_entidad(e);
 	}
 }
