@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import Conexion.Conection;
 import Conexion.ConnectionManage;
@@ -15,8 +16,20 @@ import ServiciosBD.PersonaServicesBD;
 import Validator.Validar_Persona;
 
 public class PersonaServices {
+	
+	//Encontrar la hoja de las personas
+	public Sheet hoja_persona(Workbook libro) {
+		Sheet hoja = null;
+		for(int contador = 0; contador < libro.getNumberOfSheets() && hoja == null;contador ++) {
+			if(libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("personas") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("personal") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("trabajadores") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("trabajador") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("empleados") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("persona")) {
+				hoja = libro.getSheetAt(contador);
+			}
+		}
+		return hoja;
+	}
+	
 	//Cargar persona en una lista
-	public ArrayList<Persona> ingresar_personas(Sheet hoja,int posicion_hoja,int cantidad_filas,int cantida_columnas) {
+	public ArrayList<Persona> extraer_personas(Sheet hoja,int posicion_hoja) {
 		ArrayList<Persona>listado_personas = new ArrayList<>();
 		String entidad = null;
 		String nombre = null;
@@ -30,8 +43,8 @@ public class PersonaServices {
 		String numero = null;
 		String localidad = null;
 		String datos = null;
-		for(int contador_fila = 1; contador_fila<cantidad_filas;contador_fila++) {
-			for(int contador_columna=0;contador_columna<cantida_columnas;contador_columna++) {
+		for(int contador_fila = 1; contador_fila<hoja.getLastRowNum()+1;contador_fila++) {
+			for(int contador_columna=0;contador_columna<hoja.getRow(0).getLastCellNum();contador_columna++) {
 				if(hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("nombre") || hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("nombreyapellidos") || hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("nombres") || hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("Nombres y apellidos")) {
 					try {
 						nombre = hoja.getRow(contador_fila).getCell(contador_columna).getStringCellValue();

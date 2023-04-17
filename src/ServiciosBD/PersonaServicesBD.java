@@ -8,14 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import Conexion.Conection;
 import Conexion.ConnectionManage;
 import Desarrollo.Persona;
 
 public class PersonaServicesBD {
 	public void insertar_persona(Persona p) throws ClassNotFoundException, SQLException,Exception{
-		try (Connection con = ConnectionManage.getIntancia().getconection()){
+		try (Connection con = new Conection().conexion()){
 			String consulta = "SELECT insertar_persona(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			CallableStatement prepa = con.prepareCall(consulta);
+			PreparedStatement prepa = con.prepareStatement(consulta);
 			prepa.setString(1, p.getEntidad());
 			prepa.setString(2, p.getNombre());
 			prepa.setString(3, p.getCI());
@@ -29,27 +30,22 @@ public class PersonaServicesBD {
 			prepa.setString(11, p.getLocalidad());
 			prepa.setString(12, p.getDatos());
 			prepa.execute();
-		} catch (SQLException e) {
-			throw new Exception(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
+			prepa.close();
 		}
 	}
 	
 	public void eliminar_persona() throws ClassNotFoundException, SQLException, Exception{
-		try (Connection con = ConnectionManage.getIntancia().getconection()){
+		try (Connection con =new Conection().conexion()){
 			String consulta = "{call eliminar_personas()}";
 			CallableStatement prepa = con.prepareCall(consulta);
 			prepa.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("No se pudo eliminar las personas");
-		}
+			prepa.close();
+		} 
 	}
 	
 	public ArrayList<String> listado_personas_municipioXentidad(String entidad) throws ClassNotFoundException, SQLException{
 		ArrayList<String>persona_municipio = new ArrayList<String>();
-		try (Connection con = ConnectionManage.getIntancia().getconection()){
+		try (Connection con = new Conection().conexion()){
 			String consulta = "{?=call entidad_persona_municipioXEntidad(?)}";
 			con.setAutoCommit(false);
 			CallableStatement prepa = con.prepareCall(consulta);
@@ -60,8 +56,8 @@ public class PersonaServicesBD {
 			while(e.next()) {
 				persona_municipio.add(e.getString(1));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			e.close();
+			prepa.close();
 		}
 		return persona_municipio;
 	}

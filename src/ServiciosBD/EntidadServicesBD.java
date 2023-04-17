@@ -44,9 +44,6 @@ public class EntidadServicesBD {
 			String consulta = "{call eliminar_entidades()}";
 			CallableStatement prepa = con.prepareCall(consulta);
 			prepa.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("No se pudo eliminar las entidades");
 		}
 	}
 	
@@ -63,9 +60,6 @@ public class EntidadServicesBD {
 			while(resultado.next()) {
 				listado_entidades_nombre.add(resultado.getString(1));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("No se pudo cargar el listado de nombre de la entidades");
 		}
 		return listado_entidades_nombre;
 	}
@@ -91,8 +85,6 @@ public class EntidadServicesBD {
 					}
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return listado_municipios_entidades;
 	}
@@ -109,8 +101,6 @@ public class EntidadServicesBD {
 			while(resultado.next()) {
 				valor = valor+resultado.getLong(1);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return valor;
 	}

@@ -35,26 +35,4 @@ public class FileServices {
 		}
 		return hojas;
 	}
-	
-	//Encontrar la hoja de las entidades
-	public Sheet hoja_entidad(Workbook libro) {
-		Sheet hoja = null;
-		for(int contador = 0; contador < libro.getNumberOfSheets() && hoja == null;contador ++) {
-			if(libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("entidad") ||libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("entidades") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("trabajos") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("Centros de trabajos") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("centrodetrabajo") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("unidades") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("centro") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("lugardetrabajo") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("lugaresdetrabajo") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("lugaresdetrabajos")){
-				hoja = libro.getSheetAt(contador);
-			}
-		}
-		return hoja;
-	}
-	
-	//Encontrar la hoja de las personas
-	public Sheet hoja_persona(Workbook libro) {
-		Sheet hoja = null;
-		for(int contador = 0; contador < libro.getNumberOfSheets() && hoja == null;contador ++) {
-			if(libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("personas") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("personal") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("trabajadores") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("trabajador") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("empleados") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("persona")) {
-				hoja = libro.getSheetAt(contador);
-			}
-		}
-		return hoja;
-	}
 }

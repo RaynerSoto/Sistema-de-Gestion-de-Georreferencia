@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import Conexion.Conection;
 import Conexion.ConnectionManage;
@@ -15,6 +16,17 @@ import ServiciosBD.EntidadServicesBD;
 import Validator.Validar_General;
 
 public class EntidadServices {
+	
+	//Encontrar la hoja de las entidades
+	public Sheet hoja_entidad(Workbook libro) {
+		Sheet hoja = null;
+		for(int contador = 0; contador < libro.getNumberOfSheets() && hoja == null;contador ++) {
+			if(libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("entidad") ||libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("entidades") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("trabajos") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("Centros de trabajos") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("centrodetrabajo") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("unidades") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("centro") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("lugardetrabajo") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("lugaresdetrabajo") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("lugaresdetrabajos")){
+				hoja = libro.getSheetAt(contador);
+			}
+		}
+		return hoja;
+	}
 	
 	//Cargar entidades en una lista
 	public ArrayList<Entidad> extraer_entidades(Sheet hoja,int posicion_hoja) {
@@ -34,8 +46,6 @@ public class EntidadServices {
 		String horario_actual_salida = null;
 		String horario_propuesto_entrada = null;
 		String horario_propuesto_salida = null;
-		int filas = hoja.getLastRowNum()+1;
-		int columna = hoja.getRow(0).getLastCellNum();
 		for(int contador_fila = 1; contador_fila<hoja.getLastRowNum()+1;contador_fila++) {
 			for(int contador_columna=0;contador_columna<hoja.getRow(0).getLastCellNum();contador_columna++) {
 				if(hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("id.centro trabajo") || hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("centrotrabajo") || hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("centro")) {
