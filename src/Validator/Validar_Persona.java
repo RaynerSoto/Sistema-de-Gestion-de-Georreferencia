@@ -13,6 +13,7 @@ public class Validar_Persona extends Validar_General{
 	}
 	
 	public void validar_carnet(String CI) throws Exception {
+		boolean verdad = true;
         if (CI.length() != 11) {
         	throw new Exception("El carnet debe tener 11 digitos");
         } else {

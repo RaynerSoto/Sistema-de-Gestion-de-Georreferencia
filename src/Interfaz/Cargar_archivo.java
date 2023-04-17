@@ -19,14 +19,14 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.tools.ant.taskdefs.Java;
 
+import Conexion.ConnectionManage;
 import Desarrollo.Entidad;
 import Desarrollo.Errores;
 import Desarrollo.Persona;
 import Desarrollo.Transporte;
-import Servicios.ConnectionManage;
-import Servicios.EntidadServices;
-import Servicios.FileServices;
-import Servicios.PersonaServices;
+import ServicesIntern.FileServices;
+import ServiciosBD.EntidadServicesBD;
+import ServiciosBD.PersonaServicesBD;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -140,8 +140,8 @@ public class Cargar_archivo extends JDialog {
 					}
 					else {
 						if(seleccion.isSelected() == true) {
-							EntidadServices enti = new EntidadServices();
-							PersonaServices perso = new PersonaServices();
+							EntidadServicesBD enti = new EntidadServicesBD();
+							PersonaServicesBD perso = new PersonaServicesBD();
 							try {
 								perso.eliminar_persona();
 								enti.eliminar_entidades();
@@ -439,7 +439,7 @@ public class Cargar_archivo extends JDialog {
 	public void llenar_entidad() throws ClassNotFoundException, SQLException{
 		boolean verdad = false;
 		for(int contador = 0;verdad == false;) {
-			EntidadServices enti = new EntidadServices();
+			EntidadServicesBD enti = new EntidadServicesBD();
 			try {
 				if(Transporte.getInstance().getListado_entidades().get(contador).getNombre().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getProvincia().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getMunicipio().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getDireccion().equals("") == true) {
 					String causa = "Valores necesarios no ingresados";
@@ -468,7 +468,7 @@ public class Cargar_archivo extends JDialog {
 	public void llenar_personas() throws Exception {
 		boolean verdad = false;
 		for(int contador = 0;verdad == false;) {
-			PersonaServices perso = new PersonaServices();
+			PersonaServicesBD perso = new PersonaServicesBD();
 			try {
 				if(Transporte.getInstance().getListado_personas().get(contador).getEntidad().equals("") == true || Transporte.getInstance().getListado_personas().get(contador).getNombre().equals("") == true || Transporte.getInstance().getListado_personas().get(contador).getCI().equals("") == true || Transporte.getInstance().getListado_personas().get(contador).getDireccion().equals("") == true || Transporte.getInstance().getListado_personas().get(contador).getCI().length() != 11) {
 					String causa = "Valores necesarios no ingresados o erroneos";

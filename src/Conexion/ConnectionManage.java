@@ -1,4 +1,4 @@
-package Servicios;
+package Conexion;
 
 import java.sql.Connection;
 import java.util.logging.*;
@@ -20,7 +20,7 @@ public class ConnectionManage {
 	
 	public ConnectionManage() throws SQLException, ClassNotFoundException {
 		 Class.forName("org.postgresql.Driver"); //Carga de driver
-		 connection = DriverManager.getConnection("jdbc:postgresql://localhost:5433/transporte_obrero", "postgres", "0000"); //conexi�n a la basa de datos
+		 connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/transporte_obrero", "postgres", "0000"); //conexi�n a la basa de datos
 	 }
 	
 	 //Acceso a la conexi�n

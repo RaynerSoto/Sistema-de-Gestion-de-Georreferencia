@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Desarrollo.Entidad;
 import Desarrollo.Extras;
-import Servicios.EntidadServices;
+import ServiciosBD.EntidadServicesBD;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -191,7 +191,7 @@ public class Seleccion_filtrado extends JDialog {
 	}
 	public void llenar_combo() throws ClassNotFoundException, SQLException {
 		ArrayList<String> listado = new ArrayList<String>();
-		EntidadServices ent = new EntidadServices();
+		EntidadServicesBD ent = new EntidadServicesBD();
 		listado = ent.listado_entidades_nombre();
 		for(int contador = 0; contador<listado.size();contador++) {
 			for(int contador2 = 0;contador2 < Extras.getInstance().getListado_filtroArrayList().size();contador2++) {

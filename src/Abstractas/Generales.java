@@ -3,6 +3,7 @@ package Abstractas;
 import Desarrollo.Entidad;
 
 public abstract class Generales {
+	private String entidad;
 	private String nombre;
 	private String direccion;
 	private String provincia;
@@ -13,7 +14,6 @@ public abstract class Generales {
 	private String numero;
 	private String localidad;
 	private String datos;
-	private String entidad;
 	private int hoja;
 	private int fila;
 	

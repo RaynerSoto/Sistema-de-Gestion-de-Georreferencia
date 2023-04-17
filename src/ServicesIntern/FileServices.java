@@ -1,4 +1,4 @@
-package Servicios;
+package ServicesIntern;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,5 +48,13 @@ public class FileServices {
 	}
 	
 	//Encontrar la hoja de las personas
-	
+	public Sheet hoja_persona(Workbook libro) {
+		Sheet hoja = null;
+		for(int contador = 0; contador < libro.getNumberOfSheets() && hoja == null;contador ++) {
+			if(libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("personas") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("personal") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("trabajadores") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("trabajador") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("empleados") || libro.getSheetAt(contador).getSheetName().toLowerCase().trim().equalsIgnoreCase("persona")) {
+				hoja = libro.getSheetAt(contador);
+			}
+		}
+		return hoja;
+	}
 }

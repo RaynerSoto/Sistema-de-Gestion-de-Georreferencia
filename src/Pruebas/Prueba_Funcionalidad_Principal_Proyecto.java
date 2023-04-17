@@ -1,0 +1,14 @@
+package Pruebas;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class Prueba_Funcionalidad_Principal_Proyecto {
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
+	}
+
+}

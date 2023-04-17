@@ -10,10 +10,10 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.collections4.map.HashedMap;
 
+import Conexion.ConnectionManage;
 import Desarrollo.Persona;
-import Servicios.ConnectionManage;
-import Servicios.EntidadServices;
-import Servicios.PersonaServices;
+import ServiciosBD.EntidadServicesBD;
+import ServiciosBD.PersonaServicesBD;
 
 import javax.swing.JPopupMenu;
 import java.awt.Component;
@@ -87,8 +87,8 @@ public class Interfaz_principal extends JFrame {
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Eliminar todos los datos");
 		mntmNewMenuItem_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EntidadServices enti = new EntidadServices();
-				PersonaServices perso = new PersonaServices();
+				EntidadServicesBD enti = new EntidadServicesBD();
+				PersonaServicesBD perso = new PersonaServicesBD();
 				try {
 					perso.eliminar_persona();
 					enti.eliminar_entidades();
@@ -191,6 +191,6 @@ public class Interfaz_principal extends JFrame {
 		});
 	}
 	public void actualizar_menu() {
-		EntidadServices enti = new EntidadServices();
+		EntidadServicesBD enti = new EntidadServicesBD();
 	}
 }

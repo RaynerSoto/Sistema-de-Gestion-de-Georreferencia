@@ -1,123 +1,18 @@
-package Servicios;
+package ServicesIntern;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.sql.*;
-
+import Conexion.ConnectionManage;
 import Desarrollo.Entidad;
 import Desarrollo.Errores;
-import Desarrollo.Extras;
 import Desarrollo.Transporte;
+import ServiciosBD.EntidadServicesBD;
 import Validator.Validar_General;
 
 public class EntidadServices {
-	public void insertar_entidad(Entidad e) throws ClassNotFoundException, SQLException,Exception {
-		try (Connection con = ConnectionManage.getIntancia().getconection()){
-			String consulta = "{call insertar_entidad(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
-			CallableStatement prepa = con.prepareCall(consulta);
-			prepa.setString(1, e.getNombre());
-			prepa.setString(2, e.getEntidad());
-			prepa.setString(3, e.getMunicipio());
-			prepa.setString(4, e.getProvincia());
-			prepa.setString(5, e.getDireccion());
-			prepa.setString(6, e.getCalle());
-			prepa.setString(7, e.getEntrecalle1());
-			prepa.setString(8, e.getEntrecalle2());
-			prepa.setString(9, e.getNumero());
-			prepa.setString(10, e.getLocalidad());
-			prepa.setString(11, e.getHorario_actual_entrada());
-			prepa.setString(12, e.getHorario_actual_salida());
-			prepa.setString(13, e.getHorario_propuesto_entrada());
-			prepa.setString(14, e.getHorario_propuesto_salida());
-			prepa.setString(15, e.getDatos());
-			prepa.execute();
-		} catch (Exception e2) {
-			e2.printStackTrace();
-			throw new Exception("No se pudo insertar la entidad");
-		}
-	}
-	
-	public void eliminar_entidades() throws ClassNotFoundException, SQLException, Exception {
-		try (Connection con = ConnectionManage.getIntancia().getconection()){
-			String consulta = "{call eliminar_entidades()}";
-			CallableStatement prepa = con.prepareCall(consulta);
-			prepa.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("No se pudo eliminar las entidades");
-		}
-	}
-	
-	//Probar luego
-	public ArrayList<String> listado_entidades_nombre() throws SQLException, ClassNotFoundException,Exception{
-		ArrayList<String>listado_entidades_nombre = new ArrayList<String>();
-		try (Connection con = ConnectionManage.getIntancia().getconection()){
-			String consulta = "{?=call entidad_listado_nombre()}";
-			con.setAutoCommit(false);
-			CallableStatement prepa = con.prepareCall(consulta);
-			prepa.registerOutParameter(1,java.sql.Types.REF_CURSOR);
-			prepa.execute();
-			ResultSet resultado = (ResultSet) prepa.getObject(1);
-			while(resultado.next()) {
-				listado_entidades_nombre.add(resultado.getString(1));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("No se pudo cargar el listado de nombre de la entidades");
-		}
-		return listado_entidades_nombre;
-	}
-	
-	public ArrayList<String> listado_municipios_entidades(ArrayList<String>listado) throws ClassNotFoundException, SQLException{
-		ArrayList<String>listado_municipios_entidades = new ArrayList<String>();
-		try (Connection con = ConnectionManage.getIntancia().getconection()){
-			for(int contador = 0; contador< listado.size();contador++) {
-				String consulta = "{call entidad_municipio_buscar(?)}";			
-				CallableStatement prepa = con.prepareCall(consulta);
-				prepa.setString(1, Extras.getInstance().getListado_filtroArrayList().get(contador));
-				ResultSet resultado = prepa.executeQuery();
-				while(resultado.next()) {
-					boolean verdad = false;
-					String valor = resultado.getString(1);
-					for(int contador2 = 0; contador2<listado_municipios_entidades.size() && verdad == false;contador2++) {
-						if(valor.equals(listado_municipios_entidades.get(contador2)) == true) {
-							verdad = true;
-						}
-					}
-					if(verdad == false) {
-						listado_municipios_entidades.add(valor);
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return listado_municipios_entidades;
-	}
-	
-	public long calculo(String origen,String destino, String entidad) throws ClassNotFoundException, SQLException {
-		long valor = 0;
-		try (Connection con = ConnectionManage.getIntancia().getconection()){
-			String consulta = "{call entidad_calculo_origen_destino(?,?,?)}";
-			CallableStatement prepa = con.prepareCall(consulta);
-			prepa.setString(1, entidad);
-			prepa.setString(2, origen);
-			prepa.setString(3, destino);
-			ResultSet resultado = prepa.executeQuery();
-			while(resultado.next()) {
-				valor = valor+resultado.getLong(1);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return valor;
-	}
 	
 	//Cargar entidades en una lista
 	public ArrayList<Entidad> extraer_entidades(Sheet hoja,int posicion_hoja) {
@@ -137,6 +32,8 @@ public class EntidadServices {
 		String horario_actual_salida = null;
 		String horario_propuesto_entrada = null;
 		String horario_propuesto_salida = null;
+		int filas = hoja.getLastRowNum()+1;
+		int columna = hoja.getRow(0).getLastCellNum();
 		for(int contador_fila = 1; contador_fila<hoja.getLastRowNum()+1;contador_fila++) {
 			for(int contador_columna=0;contador_columna<hoja.getRow(0).getLastCellNum();contador_columna++) {
 				if(hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("id.centro trabajo") || hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("centrotrabajo") || hoja.getRow(0).getCell(contador_columna).getStringCellValue().trim().equalsIgnoreCase("centro")) {
@@ -256,20 +153,9 @@ public class EntidadServices {
 		ArrayList<Errores> listado_errores = new ArrayList<>();
 		boolean verdad = false;
 		for(int contador = 0;verdad == false;) {
-			EntidadServices enti = new EntidadServices();
 			try {
-				/*
-				if(Transporte.getInstance().getListado_entidades().get(contador).getNombre().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getProvincia().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getMunicipio().equals("") == true || Transporte.getInstance().getListado_entidades().get(contador).getDireccion().equals("") == true) {
-					String causa = "Valores necesarios no ingresados";
-					Errores erro = new Errores(Transporte.getInstance().getListado_entidades().get(contador), causa); 
-					Transporte.getInstance().getListado_errores().add(erro);
-				}
-				else {
-					enti.insertar_entidad(Transporte.getInstance().getListado_entidades().get(contador));
-				}*/
-				Validar_General val = new Validar_General();
-				val.validar_general(listaEntidads.get(contador));
-				enti.insertar_entidad(listaEntidads.get(contador));
+				new Validar_General().validar_general(listaEntidads.get(contador));
+				new EntidadServicesBD().insertar_entidad(listaEntidads.get(contador));
 				listaEntidads.remove(contador);
 			} catch (org.postgresql.util.PSQLException e2) {
 				String causa = "Los datos ya se han introducido previamente";

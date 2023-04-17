@@ -1,4 +1,4 @@
-package Servicios;
+package ServiciosBD;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -8,9 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import Conexion.ConnectionManage;
 import Desarrollo.Persona;
 
-public class PersonaServices {
+public class PersonaServicesBD {
 	public void insertar_persona(Persona p) throws ClassNotFoundException, SQLException,Exception{
 		try (Connection con = ConnectionManage.getIntancia().getconection()){
 			String consulta = "SELECT insertar_persona(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
