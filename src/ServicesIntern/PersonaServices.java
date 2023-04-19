@@ -137,7 +137,7 @@ public class PersonaServices {
 	}
 	
 	//Guardar entidades en la BD		
-	public ArrayList<Errores> llenar_personas(ArrayList<Persona>personas) throws Exception {
+	public ArrayList<Errores> almacenar_personas(ArrayList<Persona>personas) throws Exception {
 		ArrayList<Errores>errores = new ArrayList<>();
 		boolean verdad = false;
 		for(int contador = 0;verdad == false;) {
