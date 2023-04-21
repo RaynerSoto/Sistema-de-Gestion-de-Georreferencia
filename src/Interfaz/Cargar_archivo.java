@@ -151,13 +151,11 @@ public class Cargar_archivo extends JDialog {
 				} catch (Exception e2) {
 					if(e2.getMessage().equals("Datos cargados con éxito") == true) {
 						JOptionPane.showMessageDialog(Cargar_archivo.this,e2.getMessage(),"Conseguido",JOptionPane.YES_OPTION);
-						dispose();
 					}
 					else if(e2.getMessage().equals("Datos cargados con errores") == true) {
 						JOptionPane.showMessageDialog(Cargar_archivo.this,e2.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
 						Listado_errores eroErrores = new Listado_errores();
 						eroErrores.setVisible(true);
-						dispose();
 					}
 					else if(e2.getMessage().equals("La hoja del personal se encuentra vacía. No se pudo cargar") == true) {
 						JOptionPane.showMessageDialog(Cargar_archivo.this,e2.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
@@ -165,6 +163,7 @@ public class Cargar_archivo extends JDialog {
 					else {
 						JOptionPane.showMessageDialog(Cargar_archivo.this,e2.getMessage(),"Advertencia",JOptionPane.ERROR_MESSAGE);
 					}
+					dispose();
 				}
 		}});
 		button_1.setBounds(10, 155, 113, 31);

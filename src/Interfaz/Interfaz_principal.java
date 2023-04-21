@@ -53,7 +53,7 @@ public class Interfaz_principal extends JFrame {
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(null,e.getMessage(),"Error Crítico",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,"Error de conexión con el servidor","Error Crítico",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -94,7 +94,7 @@ public class Interfaz_principal extends JFrame {
 					enti.eliminar_entidades();
 					JOptionPane.showMessageDialog(Interfaz_principal.this,"Datos borrados con éxtio","Conseguido",JOptionPane.INFORMATION_MESSAGE);
 				} catch (ClassNotFoundException e1) {
-					JOptionPane.showMessageDialog(Interfaz_principal.this, e,"Error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(Interfaz_principal.this,e,"Error",JOptionPane.ERROR_MESSAGE);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(Interfaz_principal.this,"Error en conexion a la Base de datos","Error",JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e1) {

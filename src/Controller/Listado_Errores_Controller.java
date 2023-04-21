@@ -21,7 +21,7 @@ public class Listado_Errores_Controller implements Table_Interfaces {
 			int p = -1;
 			tabla [i] [++p] = listado.get(i).getEntidad().getNombre();
 			tabla [i] [++p] = listado.get(i).getEntidad().getHoja()+1;
-			tabla [i] [++p] = listado.get(i).getEntidad().getFila()+1;
+			tabla [i] [++p] = listado.get(i).getEntidad().getFila();
 			if(listado.get(i).getEntidad() instanceof Entidad) {
 				tabla [i][++p] = "Centro de Trabajo";
 			}
@@ -29,7 +29,6 @@ public class Listado_Errores_Controller implements Table_Interfaces {
 				tabla [i][++p] = "Personal";
 			}
 			tabla [i] [++p] = listado.get(i).getCausa();
-			Transporte.getInstance().getListado_errores().remove(i);
 		}		
 		
 		DefaultTableModel defaultTableModel = new DefaultTableModel(tabla, encabezado){

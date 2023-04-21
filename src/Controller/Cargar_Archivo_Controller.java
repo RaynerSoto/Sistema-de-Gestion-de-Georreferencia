@@ -58,7 +58,7 @@ public class Cargar_Archivo_Controller {
 					}
 					if(entidads.size() != 0) {
 						Transporte.getInstance().getListado_errores().addAll(new EntidadServices().almacenar_entidad(entidads));
-;						if(Transporte.getInstance().getListado_personas().size() != 0) {
+;						if(personas.size() != 0) {
 							Transporte.getInstance().getListado_errores().addAll(new PersonaServices().almacenar_personas(personas));
 							if(Transporte.getInstance().getListado_errores().size() == 0) {
 								throw new Exception("Datos cargados con éxito");
